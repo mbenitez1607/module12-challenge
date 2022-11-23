@@ -14,39 +14,71 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 const topMenu = ["View All Departments","View All Roles", "View All Employess", 
-                "Add a Department", "Add a Role", "Add an Employee", "Update an Employee's Role"];
+                "Add a Department", "Add a Role", "Add an Employee", "Update an Employee's Role", "Quit"];
 
 function displayTable(option){
-    console.log(`displayTable: ${option}`);
-    const sql = `SELECT * FROM department`;
-    db.query(sql, (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
+    let sql = ``;
+    switch (option) {
+        case topMenu[0]:
+            sql = `SELECT * FROM department`;
+            db.query(sql, (err, rows) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.table(`\n\x1B[36m${option}\x1b[0m\n`, rows);
+            });
+            //break;
+        case topMenu[1]:
+            sql = `SELECT * FROM role`;
+            db.query(sql, (err, rows) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.table(`\n\x1B[36m${option}\x1b[0m\n`, rows);
+            });
+            break;
+        case topMenu[2]:
+            sql = `SELECT * FROM employee`;
+            db.query(sql, (err, rows) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.table(`\n\x1B[36m${option}\x1b[0m\n`, rows);
+            });
+            break;
+    }
+    console.log('Press any key to continue');
+    return 0;
+}
+
+// Main function
+async function employeeTracker() {
+    let quit = 0;
+    // Show main menu until the user decides to quit
+    do {
+        const mainChoice = await inquirer.prompt([{
+            type: 'list',
+            message: 'What would you like to do?',
+            choices: topMenu,
+            name: 'topSelection'
+        }]);
+        // If user selected an action display the corresponding information
+        if (mainChoice.topSelection != "Quit") {
+            quit = displayTable(mainChoice.topSelection);
+        } else { // user decided to exit the program    
+            console.log(`Exiting the program`);
+            process.exit(0);
         }
-        console.log(rows);
-    });
+    } while (!quit);
 }
 
-function init() {
-    inquirer
-        .prompt ([
-            {
-                type: 'list',
-                message: 'What would you like to do?',
-                choices: topMenu,
-                name: 'topSelection'
-            }
-        ])
-        .then((answers) => {
-            console.log(answers.topSelection);
-            displayTable(answers.topSelection);
-        })
-}
-
+// Start server on PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    //console.log(`Server running on port ${PORT}`);
 });
 
-// Function call to initialize app
-init();
+// Start employeeTracker app
+employeeTracker();
