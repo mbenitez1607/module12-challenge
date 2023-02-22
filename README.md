@@ -38,6 +38,8 @@ To run your own version of the app do the following:
     employee - first name, last name, role, and manager
 - `UPDATE` employee role shows a prompt to select an employee to update and their new role
 
+[![Video of Employee Tracker in action](./Employee-Tracker.png)](https://drive.google.com/file/d/17ah4z1WieL5UQBBKyGuxuYXLiZNYw-cm/view?usp=share_link)
+
 ## License
 
 MIT License

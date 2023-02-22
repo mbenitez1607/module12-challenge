@@ -10,7 +10,7 @@ const db = mysql.createConnection(
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME
     },
-    console.log(`Connected to the ${process.env.DB_NAME} database`) 
+    console.log(`\n\x1B[35mConnected to the ${process.env.DB_NAME} database\n`) 
 );
 
 module.exports = db;
